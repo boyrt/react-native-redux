@@ -12,7 +12,8 @@ import {
 
 import {connect} from 'react-redux'
 import {NavigationActions} from 'react-navigation'
-import * as loginAction from '../actions/loginAction'
+import loginAction from '../actions/loginAction'
+import {bindActionCreators} from 'redux'
 
 
 const resetAction = NavigationActions.reset({
@@ -37,11 +38,11 @@ class LoginScreen extends Component {
     }
 
     render() {
-        const {login} = this.props;
+        const {loginAction} = this.props;
         return (
             <View style={styles.container}>
                 <Text>状态:{this.props.status}</Text>
-                <TouchableOpacity onPress={()=>login()} style = {{marginTop:50}}>
+                <TouchableOpacity onPress={loginAction.login} style = {{marginTop:50}}>
                     <Text>登陆</Text>
                 </TouchableOpacity>
             </View>
@@ -58,15 +59,14 @@ const styles = StyleSheet.create({
 });
 
 export default connect(//将页面与store内的state、action关联在一起，实现视图部分与逻辑处理部分的关联
-    (state)=>{
-        console.log('state',state)
-        return {
+    (state)=>({
         status:state.loginIn.status,
         isSuccess:state.loginIn.isSuccess,
         user:state.loginIn.user
-    }},
+    }),
     (dispatch)=>({
-        login:()=>dispatch(loginAction.login())
+        // login:()=>dispatch(loginAction.login())
+        loginAction:bindActionCreators(loginAction,dispatch)
     })
 )(LoginScreen)
 

@@ -10,8 +10,9 @@ import {
     Text
 } from 'react-native';
 
+import {bindActionCreators} from 'redux'
 import { connect } from 'react-redux'
-import * as counterAction from '../actions/counterAction'
+import counterAction from '../actions/counterAction'
 
 class MainScreen extends Component {
     static  navigationOptions = ({ navigation, screenProps }) => ({
@@ -19,12 +20,12 @@ class MainScreen extends Component {
     });
 
     render() {
-        const { count, addFn, reduceFn } = this.props;
+        const { count, counterAction } = this.props;
         return (
             <View style={styles.container}>
-                <Button title={'-'} onPress={reduceFn}/>
+                <Button title={'-'} onPress={counterAction.reduce}/>
                 <Text style={{ width : 50, textAlign : 'center' }}>{count}</Text>
-                <Button title={'+'} onPress={addFn}/>
+                <Button title={'+'} onPress={counterAction.add}/>
             </View>
         );
     }
@@ -47,8 +48,9 @@ export default connect(
         }
     },
     (dispatch) => ({
-        addFn : () => dispatch(counterAction.add()),
-        reduceFn : () => dispatch(counterAction.reduce())
+        counterAction : bindActionCreators(counterAction,dispatch),
+        // addFn : () => dispatch(counterAction.add()),
+        // reduceFn : () => dispatch(counterAction.reduce()),
     })
 )(MainScreen)
  
